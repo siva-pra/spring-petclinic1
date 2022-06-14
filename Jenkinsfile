@@ -1,5 +1,5 @@
 pipeline{
-    agent  { node { label 'maven' } }
+    agent  any
     stages{
         stage('git repo'){
             steps{
