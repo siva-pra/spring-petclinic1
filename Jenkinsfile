@@ -11,15 +11,4 @@ pipeline{
                 sh 'mvn clean package'
             }
         }
-        stage('junit test report'){
-            steps{
-                junit '**/TEST-*.xml'
-            }
-        }
-        stage('archive artifacts'){
-            steps{
-                archiveArtifacts artifacts: 'target/*.jar', followSymlinks: false
-            }
-        }
-    }
-}
+        
