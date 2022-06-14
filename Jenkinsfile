@@ -3,7 +3,7 @@ pipeline{
     stages{
         stage('git repo'){
             steps{
-                git branch: 'main', credentialsId: 'MAVEN_NODE', url: 'https://github.com/spring-projects/spring-petclinic.git'
+                git branch: 'master', credentialsId: 'MAVEN_NODE', url: 'https://github.com/spring-projects/spring-petclinic.git'
              }
         }
         stage('build'){
