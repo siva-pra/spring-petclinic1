@@ -1,7 +1,7 @@
 pipeline {
     tools{
         maven 'MAVEN_HOME'
-        jar 'JAVA_HOME'
+        jdk 'JAVA_HOME'
     }
     agent { label 'maven' }
     triggers { pollSCM('* * * * *') }
@@ -10,7 +10,12 @@ pipeline {
             steps {
               git credentialsId: 'MAVEN_NODE', url: 'https://github.com/siva-pra/spring-petclinic1.git'
             }
-
+        }
+         stage('Build') {
+            steps {
+                sh 'mvn clean package'
+            }
+        }
         stage('Archive and Test Results') {
             steps {
                junit '**/surefire-reports/*.xml'
