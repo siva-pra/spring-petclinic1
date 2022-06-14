@@ -1,24 +1,24 @@
-pipeline{
-    agent any
-    stages{
-        stage('git repo'){
-            steps{
-                git branch: 'main', credentialsId: 'MAVEN_NODE', url: 'https://github.com/spring-projects/spring-petclinic.git'
-             }
+pipeline {
+    tools{
+        maven 'MAVEN_HOME'
+    }
+    agent { label 'maven' }
+    triggers { pollSCM('* * * * *') }
+    stages {
+        stage('SourceCode') {
+            steps {
+              git credentialsId: 'MAVEN_NODE', url: 'https://github.com/siva-pra/spring-petclinic1.git'
+            }
         }
-        stage('build'){
-            steps{
+        stage('Build') {
+            steps {
                 sh 'mvn clean package'
             }
         }
-        stage('junit test report'){
-            steps{
-                junit '**/TEST-*.xml'
-            }
-        }
-        stage('archive artifacts'){
-            steps{
-                archiveArtifacts artifacts: 'target/*.jar', followSymlinks: false
+        stage('Archive and Test Results') {
+            steps {
+               junit '**/surefire-reports/*.xml'
+               archiveArtifacts artifacts: 'target/*.jar', followSymlinks: false
             }
         }
     }
