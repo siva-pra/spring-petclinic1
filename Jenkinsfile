@@ -33,4 +33,12 @@ pipeline {
             }
         }
     }
+    post{
+        always{
+            mail (to: 'tellagorlasivaprasad1996@gmail.com',
+                        subject: "Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}) success.",
+                        body: "Please visit ${env.BUILD_URL} for further information.",
+                  )
+        }
+    }
 }
