@@ -7,19 +7,19 @@ pipeline {
             pollSCM('* * * * *')
       }
       parameters {
-           string(name: 'MVN-GOLE', defaultValue: 'package', description: 'this is build')
+           string(name: 'MVN_GOLE', defaultValue: 'package', description: 'this is build')
            choice(name: 'BRANCHS', choices: ['declerative', 'main'], description: 'Pick something')
             }
     agent { label 'maven' }
     stages {
         stage('SourceCode') {
             steps {
-                git branch: "${params.BRANCHS}", credentialsId: 'MAVEN_NODE', git url: 'https://github.com/siva-pra/spring-petclinic1.git' 
+                git branch: "${params.BRANCHS}", credentialsId: 'MAVEN_NODE', url: 'https://github.com/siva-pra/spring-petclinic1.git' 
             }
         }
         stage('Build') {
             steps {
-                sh "mvn ${params.MVN-GOLE}"
+                sh "mvn ${params.MVN_GOLE}"
             }
         }
         stage('Test Results') {
