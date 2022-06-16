@@ -6,8 +6,8 @@ pipeline {
             cron('*/30 * * * *')
             pollSCM('* * * * *')
       }
-      parameters {
-           string(name: 'MVN-GOLE', defaultValue: 'mvn package', description: 'this is build')
+    parameters {
+           string(name: 'MVN_GOLE', defaultValue: 'package', description: 'this is build')
            choice(name: 'BRANCHS', choices: ['declerative', 'main'], description: 'Pick something')
             }
     agent { label 'maven' }
@@ -19,7 +19,7 @@ pipeline {
         }
         stage('Build') {
             steps {
-                sh "${params.MVN-GOLE}"
+                sh "mvn ${params.MVN_GOLE}"
             }
         }
         stage('Test Results') {
