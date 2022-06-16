@@ -2,7 +2,10 @@ pipeline {
     tools{
         maven 'MAVEN_HOME'
     }
-    triggers { upstream(upstreamProjects: 'upstream', threshold: hudson.model.Result.SUCCESS) }
+    triggers { upstream(upstreamProjects: 'upstream', threshold: hudson.model.Result.SUCCESS),
+    cron('*/2 * * * *'),
+     pollSCM('* * * * *')
+      }
     agent { label 'maven' }
     stages {
         stage('SourceCode') {
