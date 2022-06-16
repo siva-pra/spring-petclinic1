@@ -14,7 +14,7 @@ pipeline {
     stages {
         stage('SourceCode') {
             steps {
-                git branch: "${params.BRANCHS}", credentialsId: 'MAVEN_NODE', url: 'https://github.com/siva-pra/spring-petclinic1.git' 
+                git branch: "${params.BRANCHS}", credentialsId: 'MAVEN_NODE', git url: 'https://github.com/siva-pra/spring-petclinic1.git' 
             }
         }
         stage('Build') {
