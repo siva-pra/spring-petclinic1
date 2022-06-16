@@ -2,6 +2,7 @@ pipeline {
     tools{
         maven 'MAVEN_HOME'
     }
+    triggers { upstream(upstreamProjects: 'upstream', threshold: hudson.model.Result.SUCCESS) }
     agent { label 'maven' }
     stages {
         stage('SourceCode') {
