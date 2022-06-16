@@ -3,7 +3,7 @@ pipeline {
         maven 'MAVEN_HOME'
     }
     triggers { upstream(upstreamProjects: 'upstream', threshold: hudson.model.Result.SUCCESS)
-            cron('*/2 * * * *')
+            cron('*/30 * * * *')
             pollSCM('* * * * *')
       }
     agent { label 'maven' }
