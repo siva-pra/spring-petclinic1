@@ -5,9 +5,9 @@ pipeline {
     triggers { 
             cron('*/30 * * * *')
             pollSCM('* * * * *')
-    }
 
     parameters {
+
            string(name: 'MVN_GOLE', defaultValue: 'package', description: 'this is build')
            choice(name: 'BRANCHS', choices: ['declerative', 'main'], description: 'Pick something')
             }
