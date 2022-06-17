@@ -14,17 +14,13 @@ pipeline {
     stages {
         stage('SourceCode') {
             steps {
-                to: 'tellagorlasivaprasad1996@gmail.com',
-                subject: "Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}) success.",
-                body: "Please visit ${env.BUILD_URL} for further information.",
+               
                 git branch: "${params.BRANCHS}", credentialsId: 'MAVEN_NODE', url: 'https://github.com/siva-pra/spring-petclinic1.git' 
             }
         }
         stage('Build') {
             steps {
-                 to: 'tellagorlasivaprasad1996@gmail.com',
-                 subject: "Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}) success.",
-                 body: "Please visit ${env.BUILD_URL} for further information.",
+                
                  sh "mvn ${params.MVN_GOLE}"
             }
         }
