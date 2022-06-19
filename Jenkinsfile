@@ -21,8 +21,11 @@ pipeline {
         }
         stage('Build') {
             steps {
-                
                  sh "mvn ${params.MVN_GOLE}"
+                 withSonarQubeEnv(){
+                    sh 'mvn sonar:sonar'
+                    
+                 }
             }
         }
         stage('Test Results') {
@@ -30,10 +33,7 @@ pipeline {
                junit '**/surefire-reports/*.xml'
             }
         }
-        stage('sonar'){
-            steps{
-              sh 'mvn sonar:sonar'
-            }
+       
         }
     }
     post{
