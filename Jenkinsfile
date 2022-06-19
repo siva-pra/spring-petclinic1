@@ -22,7 +22,7 @@ pipeline {
         stage('Build') {
             steps {
                  sh "mvn ${params.MVN_GOLE}"
-                 withSonarQubeEnv(){
+                 withSonarQubeEnv('sonar_9.5.4'){
                     sh 'mvn sonar:sonar'
                     
                  }
