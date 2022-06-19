@@ -30,9 +30,9 @@ pipeline {
                junit '**/surefire-reports/*.xml'
             }
         }
-        stage('Archive'){
+        stage('sonar'){
             steps{
-              archiveArtifacts artifacts: 'target/*.jar', followSymlinks: false
+              sh 'mvn sonar:sonar'
             }
         }
     }
