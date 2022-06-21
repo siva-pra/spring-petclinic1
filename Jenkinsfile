@@ -22,26 +22,14 @@ pipeline {
         stage('Build') {
             steps {
                  sh "mvn ${params.MVN_GOLE}"
-                 withSonarQubeEnv('sonar_9.5.4'){
-                    sh 'mvn sonar:sonar'
+                 withSonarQubeEnv(installationName:'SONAR_9.5.4', envOnly: True, credentialsId:'SONAR_TOKEN'){
+                     sh 'mvn package sonar:sonar'
                     
                  }
             }
         }
-        stage('Test Results') {
-            steps {
-               junit '**/surefire-reports/*.xml'
-            }
-        }
        
-        }
+    
     }
-    post{
-        always{
-            mail (to: 'tellagorlasivaprasad1996@gmail.com',
-                 subject: "Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}) success.",
-                 body: "Please visit ${env.BUILD_URL} for further information.",
-                  )
-        }
-    }
+   
 }
