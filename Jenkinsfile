@@ -12,7 +12,7 @@ pipeline {
         stage('SourceCode') {
             steps {
                
-                git branch: 'declerative', credentialsId: 'MAVEN_NODE', url: 'https://github.com/siva-pra/spring-petclinic1.git' 
+               git branch: 'declerative', credentialsId: 'JENKINS_BUILD', url: 'https://github.com/siva-pra/spring-petclinic1.git'
             }
         }
         stage('Build') {
