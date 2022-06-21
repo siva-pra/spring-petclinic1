@@ -19,12 +19,11 @@ pipeline {
             steps {
                  withSonarQubeEnv(installationName:'SONAR_9.5.4'){
                      sh "mvn package sonar:sonar"
-                    
+                     echo "${env.SONAR_HOST_URL}"
                  }
             }
         }
        
-    
     }
    
 }
