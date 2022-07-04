@@ -1,52 +1,34 @@
 pipeline {
     agent { label 'maven' }
-    triggers {
-        cron('30 */4 * * 1-5')
-        pollSCM('30 11 * * 1-5')
+    triggers { 
+        cron('45 23 * * 1-5')
+        pollSCM('*/5 * * * *')
     }
-    tools{
-        maven 'MAVEN_HOME'
-
-    }
-    parameters {
-        choice(name: 'BRANCH_TO_BUILD', choices: ['declarative', 'main'], description: 'To Build')
-        string(name: 'MAVEN_GOAL', defaultValue: 'clean package', description: 'For Build')
-    }
+	tools {
+		maven 'MAVEN_HOME'
+	}
     stages {
-        stage('get clone code') {
+        stage('scm') {
             steps {
-                git branch: 'declarative', credentialsId: 'JENKINS_BUILD', url: 'https://github.com/siva-pra/spring-petclinic1.git' 
+               
+                git branch: 'declarative', credentialsId: 'JENKINS_BUILD', url: 'https://github.com/siva-pra/spring-petclinic1.git'
             }
         }
-        stage('To Build') {
+        stage('build') {
             steps {
-                sh 'mvn clean package'
-            }
-        }
-        stage('Archive') {
-            steps {
-                // archive artifacts
-                archive 'target/*.jar'
-            }
-        }
-        stage('Publish Build Result') {
-            steps {
-                junit '**/TEST-*.xml'
-            }
-        }
-        stage("build & SonarQube analysis") {
-            steps {
-                withSonarQubeEnv(installationName:'SONAR_9.5.4') {
-                    sh 'mvn clean package sonar:sonar'
+                withSonarQubeEnv(installationName: 'SONAR_9.2.1') {
+                    sh "mvn clean package sonar:sonar"                                  
                 }
             }
         }
-        stage("Quality Gate") {
+		stage("Quality Gate") {
             steps {
                 timeout(time: 1, unit: 'HOURS') {
+                    // Parameter indicates whether to set pipeline to UNSTABLE if Quality Gate fails
+                    // true = set pipeline to UNSTABLE, false = don't
                     waitForQualityGate abortPipeline: true
                 }
             }
         }
     }
-}        
+}
