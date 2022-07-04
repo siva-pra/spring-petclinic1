@@ -4,6 +4,10 @@ pipeline {
         cron('30 */4 * * 1-5')
         pollSCM('30 11 * * 1-5')
     }
+    tools{
+        maven 'MAVEN_HOME'
+
+    }
     parameters {
         choice(name: 'BRANCH_TO_BUILD', choices: ['declarative', 'main'], description: 'To Build')
         string(name: 'MAVEN_GOAL', defaultValue: 'clean package', description: 'For Build')
