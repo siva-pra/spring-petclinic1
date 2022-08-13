@@ -9,7 +9,9 @@ pipeline {
     agent { label 'maven' }
     stages {
         stage ('scm') {
-            git branch: 'jfrog', url: 'https://github.com/siva-pra/spring-petclinic1.git'
+            steps {
+                git branch: 'jfrog', url: 'https://github.com/siva-pra/spring-petclinic1.git'
+            }
         }
         stage ('Artifactory configuration') {
             steps {
