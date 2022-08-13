@@ -6,42 +6,41 @@ pipeline {
             cron('*/30 * * * *')
             pollSCM('* * * * *')
     }
-
-    parameters {
-           string(name: 'MVN_GOLE', defaultValue: 'package', description: 'this is build')
-           choice(name: 'BRANCHS', choices: ['declerative', 'main'], description: 'Pick something')
-            }
     agent { label 'maven' }
     stages {
-        stage('SourceCode') {
+        stage ('scm') {
+            git branch: 'jfrog', url: 'https://github.com/siva-pra/spring-petclinic1.git'
+        }
+        stage ('Artifactory configuration') {
             steps {
+                rtMavenDeployer (
+                    id: "MAVEN_DEPLOYER",
+                    serverId: "JFROG_OSS",
+                    releaseRepo: "siva-maven-releases",
+                    snapshotRepo: "siva-maven-snapshots"
+                )
+
                
-                git branch: "${params.BRANCHS}", credentialsId: 'MAVEN_NODE', url: 'https://github.com/siva-pra/spring-petclinic1.git' 
             }
         }
-        stage('Build') {
+        stage ('Exec Maven') {
             steps {
-                 sh "mvn ${params.MVN_GOLE}"
-                 withSonarQubeEnv('sonar_9.5.4'){
-                    sh 'mvn sonar:sonar'
-                    
-                 }
+                withCredentials([usernamePassword(credentialsId: 'JFROG_OSS', usernameVariable: 'ARTIFACTORY_USERNAME', passwordVariable: 'ARTIFACTORY_PASSWORD')]) {
+                    rtMavenRun (
+                        tool: 'MAVEN_HOME', // Tool name from Jenkins configuration
+                        pom: 'pom.xml',
+                        goals: 'clean install ',
+                        deployerId: "MAVEN_DEPLOYER"
+                    )
+                }
             }
         }
-        stage('Test Results') {
+         stage ('Publish build info') {
             steps {
-               junit '**/surefire-reports/*.xml'
+                rtPublishBuildInfo (
+                    serverId: 'JFROG_OSS'
+                )
             }
-        }
-       
-        }
-    }
-    post{
-        always{
-            mail (to: 'tellagorlasivaprasad1996@gmail.com',
-                 subject: "Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}) success.",
-                 body: "Please visit ${env.BUILD_URL} for further information.",
-                  )
         }
     }
 }
